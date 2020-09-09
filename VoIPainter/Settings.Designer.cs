@@ -61,7 +61,7 @@ namespace VoIPainter {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Crop")]
         public string ResizeMode {
             get {
                 return ((string)(this["ResizeMode"]));
