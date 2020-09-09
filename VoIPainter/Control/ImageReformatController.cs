@@ -46,6 +46,10 @@ namespace VoIPainter.Control
                 case ImageResizeMode.Mode.Crop:
                     resizeOptions.Mode = ResizeMode.Crop;
                     break;
+
+                case ImageResizeMode.Mode.Center:
+                    resizeOptions.Mode = ResizeMode.BoxPad;
+                    break;
             }
 
             orig.Mutate(i => i.Resize(resizeOptions));

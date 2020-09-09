@@ -61,6 +61,15 @@ namespace VoIPainter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Center.
+        /// </summary>
+        internal static string ImageResizeModeCenter {
+            get {
+                return ResourceManager.GetString("ImageResizeModeCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop.
         /// </summary>
         internal static string ImageResizeModeCrop {

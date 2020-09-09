@@ -9,13 +9,15 @@ namespace VoIPainter.Model
         public enum Mode
         {
             Stretch,
-            Crop
+            Crop,
+            Center
         }
 
         public static Dictionary<Mode, string> ModeNames { get; } = new Dictionary<Mode, string>()
         {
             { Mode.Stretch, Strings.ImageResizeModeStretch },
-            { Mode.Crop, Strings.ImageResizeModeCrop }
+            { Mode.Crop, Strings.ImageResizeModeCrop },
+            { Mode.Center, Strings.ImageResizeModeCenter }
         };
     }
 }

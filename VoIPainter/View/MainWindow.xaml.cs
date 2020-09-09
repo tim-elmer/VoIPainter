@@ -190,7 +190,7 @@ namespace VoIPainter.View
 
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e) => new AboutWindow().ShowDialog();
 
-        private void HelpMenuItem_Click(object sender, RoutedEventArgs e) => AboutWindow.OpenLink("");
+        private void HelpMenuItem_Click(object sender, RoutedEventArgs e) => AboutWindow.OpenLink("https://github.com/tim-elmer/VoIPainter/wiki");
 
         private void SettingsMenuItem_Click(object sender, RoutedEventArgs e) => new SettingsWindow().ShowDialog();
     }
