@@ -1,0 +1,54 @@
+﻿<Application x:Class="VoIPainter.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="View/MainWindow.xaml">
+    <Application.Resources>
+        <Thickness x:Key="StandardMargin" 
+                   Left="2.5"
+                   Top="1.25"
+                   Right="2.5"
+                   Bottom="1.25"/>
+
+        <!-- https://stackoverflow.com/a/20509923 -->
+        <Style TargetType="{x:Type FrameworkElement}"
+               x:Key="ValidatingControl">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError"
+                         Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        
+        <Style TargetType="Label">
+            <Setter Property="Margin"
+                    Value="{StaticResource StandardMargin}"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin"
+                    Value="{StaticResource StandardMargin}"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin"
+                    Value="{StaticResource StandardMargin}"/>
+        </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="Margin"
+                    Value="{StaticResource StandardMargin}"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin"
+                    Value="{StaticResource StandardMargin}"/>
+        </Style>
+        <Style TargetType="ListBox">
+            <Setter Property="Margin"
+                    Value="{StaticResource StandardMargin}"/>
+        </Style>
+        <Style TargetType="Image">
+            <Setter Property="Margin"
+                    Value="{StaticResource StandardMargin}"/>
+        </Style>
+    </Application.Resources>
+</Application>
