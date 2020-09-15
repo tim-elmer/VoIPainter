@@ -124,6 +124,27 @@ namespace VoIPainter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update Available.
+        /// </summary>
+        internal static string MessageBoxUpdateAvailableCaption {
+            get {
+                return ResourceManager.GetString("MessageBoxUpdateAvailableCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An update is available: {0} ({1})
+        ///Would you like to download this update?
+        ///
+        ///Release Notes: {2}.
+        /// </summary>
+        internal static string MessageBoxUpdateAvailableText {
+            get {
+                return ResourceManager.GetString("MessageBoxUpdateAvailableText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Operation canceled.
         /// </summary>
         internal static string StatusCanceled {
@@ -160,11 +181,29 @@ namespace VoIPainter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Done formatting image.
+        /// </summary>
+        internal static string StatusFormattingImageDone {
+            get {
+                return ResourceManager.GetString("StatusFormattingImageDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starting image server....
         /// </summary>
         internal static string StatusImageServerStarting {
             get {
                 return ResourceManager.GetString("StatusImageServerStarting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image server stopped.
+        /// </summary>
+        internal static string StatusImageServerStopped {
+            get {
+                return ResourceManager.GetString("StatusImageServerStopped", resourceCulture);
             }
         }
         
@@ -178,16 +217,7 @@ namespace VoIPainter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Awaiting phone....
-        /// </summary>
-        internal static string StatusPhoneAwaiting {
-            get {
-                return ResourceManager.GetString("StatusPhoneAwaiting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Phone requested image.
+        ///   Looks up a localized string similar to {0} requested image.
         /// </summary>
         internal static string StatusPhoneRequestImage {
             get {
@@ -196,7 +226,7 @@ namespace VoIPainter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Phone requested invalid file.
+        ///   Looks up a localized string similar to {0} requested invalid file &apos;{1}&apos;.
         /// </summary>
         internal static string StatusPhoneRequestInvalid {
             get {
@@ -205,7 +235,16 @@ namespace VoIPainter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Phone requested thumbnail.
+        ///   Looks up a localized string similar to {0} made a request, but the image formatter was not ready.
+        /// </summary>
+        internal static string StatusPhoneRequestNotReady {
+            get {
+                return ResourceManager.GetString("StatusPhoneRequestNotReady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} requested thumbnail.
         /// </summary>
         internal static string StatusPhoneRequestThumbnail {
             get {
@@ -228,6 +267,60 @@ namespace VoIPainter {
         internal static string StatusReady {
             get {
                 return ResourceManager.GetString("StatusReady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking for updates....
+        /// </summary>
+        internal static string StatusUpdateCheck {
+            get {
+                return ResourceManager.GetString("StatusUpdateCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished checking for updates.
+        /// </summary>
+        internal static string StatusUpdateCheckDone {
+            get {
+                return ResourceManager.GetString("StatusUpdateCheckDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to check for updates: {0}.
+        /// </summary>
+        internal static string StatusUpdateCheckFail {
+            get {
+                return ResourceManager.GetString("StatusUpdateCheckFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No update available.
+        /// </summary>
+        internal static string StatusUpdateCheckNegative {
+            get {
+                return ResourceManager.GetString("StatusUpdateCheckNegative", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update available.
+        /// </summary>
+        internal static string StatusUpdateCheckPositive {
+            get {
+                return ResourceManager.GetString("StatusUpdateCheckPositive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgraded settings to current version.
+        /// </summary>
+        internal static string StatusUpgradeSettings {
+            get {
+                return ResourceManager.GetString("StatusUpgradeSettings", resourceCulture);
             }
         }
         

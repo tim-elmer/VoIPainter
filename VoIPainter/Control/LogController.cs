@@ -3,6 +3,9 @@ using VoIPainter.Model.Logging;
 
 namespace VoIPainter.Control
 {
+    /// <summary>
+    /// Handles logging
+    /// </summary>
     public class LogController
     {
         public ObservableCollection<Entry> LogEntries { get; private set; } = new ObservableCollection<Entry>();

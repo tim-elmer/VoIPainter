@@ -141,6 +141,18 @@
   <data name="LogSeverityWarning" xml:space="preserve">
     <value>Warning</value>
   </data>
+  <data name="MessageBoxUpdateAvailableCaption" xml:space="preserve">
+    <value>Update Available</value>
+  </data>
+  <data name="MessageBoxUpdateAvailableText" xml:space="preserve">
+    <value>An update is available: {0} ({1})
+Would you like to download this update?
+
+Release Notes: {2}</value>
+    <comment>0: Version
+1: Date
+2: Release Notes</comment>
+  </data>
   <data name="StatusCanceled" xml:space="preserve">
     <value>Operation canceled</value>
   </data>
@@ -153,29 +165,59 @@
   <data name="StatusFormattingImage" xml:space="preserve">
     <value>Formatting image...</value>
   </data>
+  <data name="StatusFormattingImageDone" xml:space="preserve">
+    <value>Done formatting image</value>
+  </data>
   <data name="StatusImageServerStarting" xml:space="preserve">
     <value>Starting image server...</value>
+  </data>
+  <data name="StatusImageServerStopped" xml:space="preserve">
+    <value>Image server stopped</value>
   </data>
   <data name="StatusImageServerStopping" xml:space="preserve">
     <value>Stopping image server...</value>
   </data>
-  <data name="StatusPhoneAwaiting" xml:space="preserve">
-    <value>Awaiting phone...</value>
-  </data>
   <data name="StatusPhoneRequestImage" xml:space="preserve">
-    <value>Phone requested image</value>
+    <value>{0} requested image</value>
+    <comment>0: IP</comment>
   </data>
   <data name="StatusPhoneRequestInvalid" xml:space="preserve">
-    <value>Phone requested invalid file</value>
+    <value>{0} requested invalid file '{1}'</value>
+    <comment>0: IP
+1: Request</comment>
+  </data>
+  <data name="StatusPhoneRequestNotReady" xml:space="preserve">
+    <value>{0} made a request, but the image formatter was not ready</value>
+    <comment>0: IP</comment>
   </data>
   <data name="StatusPhoneRequestThumbnail" xml:space="preserve">
-    <value>Phone requested thumbnail</value>
+    <value>{0} requested thumbnail</value>
+    <comment>0: IP</comment>
   </data>
   <data name="StatusPhoneSendingCommand" xml:space="preserve">
     <value>Sending command to phone...</value>
   </data>
   <data name="StatusReady" xml:space="preserve">
     <value>Ready</value>
+  </data>
+  <data name="StatusUpdateCheck" xml:space="preserve">
+    <value>Checking for updates...</value>
+  </data>
+  <data name="StatusUpdateCheckDone" xml:space="preserve">
+    <value>Finished checking for updates</value>
+  </data>
+  <data name="StatusUpdateCheckFail" xml:space="preserve">
+    <value>Failed to check for updates: {0}</value>
+    <comment>0: Message</comment>
+  </data>
+  <data name="StatusUpdateCheckNegative" xml:space="preserve">
+    <value>No update available</value>
+  </data>
+  <data name="StatusUpdateCheckPositive" xml:space="preserve">
+    <value>Update available</value>
+  </data>
+  <data name="StatusUpgradeSettings" xml:space="preserve">
+    <value>Upgraded settings to current version</value>
   </data>
   <data name="TGotResponse" xml:space="preserve">
     <value>Got response: {0}: {1}</value>

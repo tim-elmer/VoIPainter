@@ -2,83 +2,95 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using VoIPainter.Model;
+using System.Threading.Tasks;
 using VoIPainter.Model.Logging;
 
 namespace VoIPainter.Control
 {
+    /// <summary>
+    /// Handles serving images to phone
+    /// </summary>
     public class ImageServerController
     {
-        private readonly HttpListener _httpListener = new HttpListener();
-        private readonly ImageReformatController _imageReformatController;
-        private string _image;
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _cancellationTokenSource;
         private readonly LogController _logController;
+        private readonly MainController _mainController;
 
-        public string Image
+        public ImageServerController(MainController mainController)
         {
-            get => _image;
-            set
-            {
-                _image = value;
-                _imageReformatController.Path = value;
-            }
+            _mainController = mainController ?? throw new ArgumentNullException(nameof(mainController));
+
+            _logController = _mainController.LogController;
         }
 
-        public Phone.ScreenInfo ScreenInfo { get; set; }
-
-        public ImageServerController(LogController logController)
+        public void Run()
         {
-            _logController = logController ?? throw new ArgumentNullException(nameof(logController));
-            _imageReformatController = new ImageReformatController(_logController);
+            if (!(_cancellationTokenSource is null))
+                _cancellationTokenSource.Dispose();
+            _cancellationTokenSource = new CancellationTokenSource();
+            _ = Task.Factory.StartNew(Worker, _cancellationTokenSource.Token);
         }
-
-        public void Run() => ThreadPool.QueueUserWorkItem(new WaitCallback(Worker), _cancellationTokenSource.Token);
 
         private void Worker(object cancellationToken)
         {
+            using var httpListener = new HttpListener();
+
+            _logController.Log(new Entry(LogSeverity.Info, Strings.StatusImageServerStarting));
+
             var token = (CancellationToken)cancellationToken;
 
-            if (string.IsNullOrWhiteSpace(Image))
-            {
-                _logController.Log(new Entry(LogSeverity.Error, Strings.ValidationImage));
-                return;
-            }
+            httpListener.Prefixes.Clear();
+            httpListener.Prefixes.Add($"http://{GetIp()}/");
+            httpListener.Start();
 
-            _httpListener.Prefixes.Clear();
-            _httpListener.Prefixes.Add($"http://{GetIp()}/");
-            _httpListener.Start();
-
-            while (!token.IsCancellationRequested)
+            while (true)
             {
-                _logController.Log(new Entry(LogSeverity.Info, Strings.StatusPhoneAwaiting));
-                var context = _httpListener.GetContext();
+                if (token.IsCancellationRequested)
+                    break;
+
+                var context = httpListener.GetContext();
                 var request = context.Request;
                 var response = context.Response;
-                
+
+                if (token.IsCancellationRequested)
+                    break;
+
+                if (_mainController.ImageReformatController is null || _mainController.ImageReformatController.Image is null)
+                {
+                    _logController.Log(new Entry(LogSeverity.Error, string.Format(Strings.StatusPhoneRequestNotReady, request.RemoteEndPoint.Address)));
+                    response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    response.Close();
+                    continue;
+                }
+
                 var thumbnail = request.Url.ToString().Equals($"http://{GetIp()}/bg-tn.png");
 
                 if (thumbnail)
-                    _logController.Log(new Entry(LogSeverity.Info, Strings.StatusPhoneRequestThumbnail));
+                    _logController.Log(new Entry(LogSeverity.Info, string.Format(Strings.StatusPhoneRequestThumbnail, request.RemoteEndPoint.Address)));
                 else if (request.Url.ToString().Equals($"http://{GetIp()}/bg.png"))
-                    _logController.Log(new Entry(LogSeverity.Info, Strings.StatusPhoneRequestImage));
+                    _logController.Log(new Entry(LogSeverity.Info, string.Format(Strings.StatusPhoneRequestImage, request.RemoteEndPoint.Address)));
                 else
                 {
-                    _logController.Log(new Entry(LogSeverity.Error, Strings.StatusPhoneRequestInvalid));
+                    _logController.Log(new Entry(LogSeverity.Error, string.Format(Strings.StatusPhoneRequestInvalid, request.RemoteEndPoint.Address, request.Url.AbsolutePath)));
                     response.StatusCode = (int)HttpStatusCode.NotFound;
-                    break;
+                    response.Close();
+                    continue;
                 }
 
                 response.StatusCode = (int)HttpStatusCode.OK;
 
                 var outputStream = response.OutputStream;
-                _imageReformatController.Format(outputStream, ScreenInfo, thumbnail);
+
+                if (!token.IsCancellationRequested)
+                    _mainController.ImageReformatController.Stream(outputStream, thumbnail);
+                    
                 outputStream.Close();
+                response.Close();
             }
 
-            _httpListener.Stop();
-            _httpListener.Close();
-            _logController.Log(new Entry(LogSeverity.Info, Strings.StatusFinished));
+            httpListener.Stop();
+            httpListener.Close();
+            _logController.Log(new Entry(LogSeverity.Info, Strings.StatusImageServerStopped));
         }
 
         public void Stop()

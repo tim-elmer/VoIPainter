@@ -8,19 +8,6 @@
                    Right="2.5"
                    Bottom="1.25"/>
 
-        <!-- https://stackoverflow.com/a/20509923 -->
-        <Style TargetType="{x:Type FrameworkElement}"
-               x:Key="ValidatingControl">
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError"
-                         Value="True">
-                    <Setter Property="ToolTip"
-                            Value="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        
-        
         <Style TargetType="Label">
             <Setter Property="Margin"
                     Value="{StaticResource StandardMargin}"/>

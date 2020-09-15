@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 namespace VoIPainter
 {
@@ -11,16 +10,7 @@ namespace VoIPainter
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            // Borrowed from https://stackoverflow.com/a/2698338
-            if (Settings.Default.UpgradeRequired)
-            {
-                Settings.Default.Upgrade();
-                Settings.Default.UpgradeRequired = false;
-                Settings.Default.Save();
-            }
-
-            StartupUri = new Uri("View/MainWindow.xaml", UriKind.Relative);
+            _ = new Control.MainController();
         }
     }
 }

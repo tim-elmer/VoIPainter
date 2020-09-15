@@ -24,17 +24,15 @@
             <Label Content="Phone IP" 
                    Grid.Column="0" 
                    VerticalAlignment="Center"/>
-            <TextBox Text="{Binding Path=Target, Mode=TwoWay, ValidatesOnDataErrors=True}" 
+            <TextBox Text="{Binding Path=LastTarget, Mode=TwoWay, ValidatesOnExceptions=True}" 
                      Grid.Column="1" 
-                     VerticalContentAlignment="Center"
-                     Style="{StaticResource ValidatingControl}"/>
+                     VerticalContentAlignment="Center"/>
             <Label Content="Username" 
                    Grid.Column="2" 
                    VerticalAlignment="Center"/>
-            <TextBox Text="{Binding Path=Username, Mode=TwoWay, ValidatesOnDataErrors=True}" 
+            <TextBox Text="{Binding Path=LastUser, Mode=TwoWay, ValidatesOnExceptions=True}" 
                      Grid.Column="3" 
-                     VerticalContentAlignment="Center"
-                     Style="{StaticResource ValidatingControl}"/>
+                     VerticalContentAlignment="Center"/>
             <Label Content="Password"
                    Grid.Column="4" 
                    VerticalAlignment="Center"/>
@@ -51,10 +49,14 @@
                       Click="BrowseButton_Click"/>
             <MenuItem Header="Settings"
                       Click="SettingsMenuItem_Click"/>
-            <MenuItem Header="Help"
-                      Click="HelpMenuItem_Click"/>
-            <MenuItem Header="About"
-                      Click="AboutMenuItem_Click"/>
+            <MenuItem Header="Help">
+                <MenuItem Header="View Help"
+                          Click="HelpMenuItem_Click"/>
+                <MenuItem Header="About"
+                          Click="AboutMenuItem_Click"/>
+                <MenuItem Header="Check for Updates"
+                          Click="CheckForUpdatesMenuItem_Click"/>
+            </MenuItem>
         </Menu>
         <Grid Margin="5,0,5,5">
             <Grid.ColumnDefinitions>
@@ -68,7 +70,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Image Source="{Binding Path=Image, Mode=OneWay}" 
+            <Image x:Name="ImageHost"
+                   Source="{Binding Path=ImagePreview, Mode=OneWay}" 
                    Stretch="Uniform" 
                    Grid.Row="0"
                    Grid.Column="0"
@@ -103,7 +106,7 @@
                           Grid.Column="1"
                           DisplayMemberPath="Key"
                           SelectedValuePath="Key"
-                          SelectedValue="{Binding Path=Model, Mode=TwoWay}"/>
+                          SelectedValue="{Binding Path=LastModel, Mode=TwoWay}"/>
             </Grid>
         </Grid>
     </DockPanel>

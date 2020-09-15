@@ -49,7 +49,7 @@ namespace VoIPainter {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("8841")]
         public string LastModel {
             get {
                 return ((string)(this["LastModel"]));

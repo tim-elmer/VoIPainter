@@ -22,6 +22,6 @@
                   ItemsSource="{Binding Path=ImageResizeModeNames}"
                   DisplayMemberPath="Value"
                   SelectedValuePath="Key"
-                  SelectedValue="{Binding Path=ImageResizeMode, Mode=TwoWay}"/>
+                  SelectedValue="{Binding Path=ResizeMode, Mode=TwoWay}"/>
     </Grid>
 </Window>

@@ -9,7 +9,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="LastModel" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">8841</Value>
     </Setting>
     <Setting Name="ResizeMode" Type="System.String" Scope="User">
       <Value Profile="(Default)">Crop</Value>

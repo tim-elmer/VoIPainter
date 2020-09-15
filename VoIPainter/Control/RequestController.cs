@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net.Http;
 using VoIPainter.Model.Logging;
+using System.Threading.Tasks;
 
 namespace VoIPainter.Control
 {
@@ -13,13 +14,15 @@ namespace VoIPainter.Control
     {
         private HttpClient _httpClient;
         private readonly HttpClientHandler _httpClientHandler;
-        private readonly LogController _logController;
+        private readonly MainController _mainController;
+        private LogController _logController;
 
         //public event EventHandler LoggingEvent;
 
-        public RequestController(LogController logController)
+        public RequestController(MainController mainController)
         {
-            _logController = logController ?? throw new ArgumentNullException(nameof(logController));
+            _mainController = mainController ?? throw new ArgumentNullException(nameof(mainController));
+            _logController = _mainController.LogController;
 
             // Ignore bad certs
             _httpClientHandler = new HttpClientHandler()
@@ -32,14 +35,17 @@ namespace VoIPainter.Control
         /// <summary>
         /// Send request
         /// </summary>
-        /// <param name="target">Target phone IP</param>
-        /// <param name="username">Username</param>
         /// <param name="password">Password</param>
-        public async void Send(string target, string username, string password)
+        public async Task Send(string password)
         {
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentNullException(nameof(password), Strings.ValidationPassword);
+
+            _logController.Log(new Entry(LogSeverity.Info, Strings.StatusPhoneSendingCommand));
+
             _httpClient = new HttpClient(_httpClientHandler)
             {
-                BaseAddress = new Uri($"https://{target}")
+                BaseAddress = new Uri($"https://{_mainController.SettingsController.LastTarget}")
             };
 
             // Tell the phone we want to do something
@@ -56,7 +62,7 @@ namespace VoIPainter.Control
             request.Content = new FormUrlEncodedContent(keyValues);
 
             // Apply credentials
-            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}")));
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_mainController.SettingsController.LastUser}:{password}")));
 
             // Send command
             var response = await _httpClient.SendAsync(request);
