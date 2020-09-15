@@ -5,22 +5,37 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.0.3</Version>
-    <AssemblyVersion>1.0.0.3</AssemblyVersion>
-    <FileVersion>1.0.0.3</FileVersion>
+    <Version>1.1.0</Version>
+    <AssemblyVersion>1.1.3.0</AssemblyVersion>
+    <FileVersion>1.1.3.0</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Copyright>Timothy Elmer 2020</Copyright>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Authors>Timothy Elmer</Authors>
     <Description>VoIPainter is a simple utility designed to change the background on a user's Cisco VoIP phone, without requiring access to the CUCM backend.</Description>
-    <PackageReleaseNotes>Add "Center" resize mode
-Persist settings across versions</PackageReleaseNotes>
+    <PackageReleaseNotes>- The preview now reflects the image that will be sent to the phone.
+- The image server now starts with the application and shares its lifetime, rather than being spun up/down for every request. This fixes a race condition and makes more sense anyways.
+- Centralization of control (main controller)
+- Movement of settings to dedicated controller to offer INotifyPropertyChanged and centralization
+- Add update checking
+- Hide sidecars from model selection as they probably dont' work (needs investegation)
+- Move web link handling to common class
+- Fix log being output without line breaks</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Link="LICENSE.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\README.md" Link="README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.1" />
@@ -46,11 +61,6 @@ Persist settings across versions</PackageReleaseNotes>
     <None Update="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

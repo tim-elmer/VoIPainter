@@ -13,7 +13,7 @@ namespace VoIPainter.Control
         public void Log(Entry entry)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() => LogEntries.Add(entry));
-            System.IO.File.AppendAllText(".\\VoIPainter.log", string.Format(Strings.LogFormat, entry.Time, entry.Severity, entry.Message));
+            System.IO.File.AppendAllText(".\\VoIPainter.log", string.Format($"{Strings.LogFormat}\r\n", entry.Time, entry.Severity, entry.Message));
         }
     }
 }
