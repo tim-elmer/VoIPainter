@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -10,7 +11,7 @@ namespace VoIPainter.Control
     /// <summary>
     /// Handles serving images to phone
     /// </summary>
-    public class ImageServerController
+    public class ImageServerController : IDisposable
     {
         private CancellationTokenSource _cancellationTokenSource;
         private readonly LogController _logController;
@@ -28,7 +29,7 @@ namespace VoIPainter.Control
             if (!(_cancellationTokenSource is null))
                 _cancellationTokenSource.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
-            _ = Task.Factory.StartNew(Worker, _cancellationTokenSource.Token);
+            _ = Task.Run(() => Worker(_cancellationTokenSource.Token));
         }
 
         private void Worker(object cancellationToken)
@@ -57,21 +58,21 @@ namespace VoIPainter.Control
 
                 if (_mainController.ImageReformatController is null || _mainController.ImageReformatController.Image is null)
                 {
-                    _logController.Log(new Entry(LogSeverity.Error, string.Format(Strings.StatusPhoneRequestNotReady, request.RemoteEndPoint.Address)));
+                    _logController.Log(new Entry(LogSeverity.Error, string.Format(CultureInfo.InvariantCulture, Strings.StatusPhoneRequestNotReady, request.RemoteEndPoint.Address)));
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     response.Close();
                     continue;
                 }
 
-                var thumbnail = request.Url.ToString().Equals($"http://{GetIp()}/bg-tn.png");
+                var thumbnail = request.Url.ToString().Equals($"http://{GetIp()}/bg-tn.png", StringComparison.InvariantCultureIgnoreCase);
 
                 if (thumbnail)
-                    _logController.Log(new Entry(LogSeverity.Info, string.Format(Strings.StatusPhoneRequestThumbnail, request.RemoteEndPoint.Address)));
-                else if (request.Url.ToString().Equals($"http://{GetIp()}/bg.png"))
-                    _logController.Log(new Entry(LogSeverity.Info, string.Format(Strings.StatusPhoneRequestImage, request.RemoteEndPoint.Address)));
+                    _logController.Log(new Entry(LogSeverity.Info, string.Format(CultureInfo.InvariantCulture, Strings.StatusPhoneRequestThumbnail, request.RemoteEndPoint.Address)));
+                else if (request.Url.ToString().Equals($"http://{GetIp()}/bg.png", StringComparison.InvariantCultureIgnoreCase))
+                    _logController.Log(new Entry(LogSeverity.Info, string.Format(CultureInfo.InvariantCulture, Strings.StatusPhoneRequestImage, request.RemoteEndPoint.Address)));
                 else
                 {
-                    _logController.Log(new Entry(LogSeverity.Error, string.Format(Strings.StatusPhoneRequestInvalid, request.RemoteEndPoint.Address, request.Url.AbsolutePath)));
+                    _logController.Log(new Entry(LogSeverity.Error, string.Format(CultureInfo.InvariantCulture, Strings.StatusPhoneRequestInvalid, request.RemoteEndPoint.Address, request.Url.AbsolutePath)));
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     response.Close();
                     continue;
@@ -106,6 +107,18 @@ namespace VoIPainter.Control
             socket.Connect("8.8.8.8", 65530);
             var endPoint = socket.LocalEndPoint as IPEndPoint;
             return endPoint.Address.ToString();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposeManaged)
+        {
+            if (disposeManaged && !(_cancellationTokenSource is null))
+                _cancellationTokenSource.Dispose();
         }
     }
 }

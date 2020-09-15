@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json.Serialization;
 
@@ -7,7 +8,7 @@ namespace VoIPainter.Model
     public class UpdateResponse
     {
         [JsonPropertyName("html_url")]
-        public string HtmlUrl { get; set; }
+        public Uri HtmlUrl { get; set; }
 
         [JsonPropertyName("tag_name")]
         public string TagName { get; set; }
@@ -21,7 +22,7 @@ namespace VoIPainter.Model
         {
             get
             {
-                var versionNumbers = TagName.Replace("v", "").Split('.').Select(e => int.Parse(e));
+                var versionNumbers = TagName.Replace("v", "", StringComparison.InvariantCultureIgnoreCase).Split('.').Select(e => int.Parse(e, NumberStyles.Integer, CultureInfo.InvariantCulture));
                 return new Version(versionNumbers.ElementAt(0), versionNumbers.ElementAt(1), 0, versionNumbers.ElementAt(2));
             }
         }

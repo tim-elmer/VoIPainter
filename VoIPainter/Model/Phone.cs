@@ -17,7 +17,7 @@ namespace VoIPainter.Model
         /// <summary>
         /// Specifies known models and their required image dimensions
         /// </summary>
-        public static Dictionary<string, ScreenInfo> Models = new Dictionary<string, ScreenInfo>()
+        public static Dictionary<string, ScreenInfo> Models { get; } = new Dictionary<string, ScreenInfo>()
         {
             { "7941", SI_G_320_196_80_53 },
             { "7961", SI_G_320_196_80_53 },
@@ -45,7 +45,8 @@ namespace VoIPainter.Model
             { "9971", SI_C_640_480_123_111 }
         };
 
-        public struct ScreenInfo
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "I don't care.")]
+        public struct ScreenInfo : System.IEquatable<ScreenInfo>
         {
             public bool Color { get; }
             public Size ImageSize { get; }
@@ -57,6 +58,21 @@ namespace VoIPainter.Model
                 ImageSize = imageSize;
                 ThumbnailSize = thumbnailSize;                
             }
+
+            public override bool Equals(object obj)
+            {
+                if (!(obj is ScreenInfo))
+                    return false;
+                return Equals((ScreenInfo)obj);
+            }
+
+            public override int GetHashCode() => (Color ? 1 : 0) ^ ImageSize.GetHashCode() ^ ThumbnailSize.GetHashCode();
+
+            public static bool operator ==(ScreenInfo left, ScreenInfo right) => left.Equals(right);
+
+            public static bool operator !=(ScreenInfo left, ScreenInfo right) => !(left == right);
+
+            public bool Equals(ScreenInfo other) => other.Color == Color && other.ImageSize == ImageSize && other.ThumbnailSize == ThumbnailSize;
         }
     }
 }

@@ -2,9 +2,7 @@
 
 namespace VoIPainter.Model
 {
-    
-
-    public class ImageResizeMode
+    public static class ImageResizeMode
     {
         public enum Mode
         {

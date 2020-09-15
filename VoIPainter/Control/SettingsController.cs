@@ -59,6 +59,9 @@ namespace VoIPainter.Control
             get => Settings.Default.LastModel; 
             set
             {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentNullException(nameof(LastModel), Strings.ValidationModel);
+
                 if (!Phone.Models.ContainsKey(value.ToUpperInvariant().Trim()))
                 {
                     _logController.Log(new Entry(LogSeverity.Error, Strings.ValidationModel));
@@ -89,7 +92,7 @@ namespace VoIPainter.Control
         /// <summary>
         /// Translation dictionary for resize modes
         /// </summary>
-        public Dictionary<ImageResizeMode.Mode, string> ImageResizeModeNames => ImageResizeMode.ModeNames;
+        public static Dictionary<ImageResizeMode.Mode, string> ImageResizeModeNames => ImageResizeMode.ModeNames;
 
         public SettingsController(LogController logController)
         {

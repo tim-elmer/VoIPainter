@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.Json;
+using System.Globalization;
 
 namespace VoIPainter.Control
 {
@@ -15,11 +16,12 @@ namespace VoIPainter.Control
 
         public UpdateCheckController(LogController logController) => _logController = logController ?? throw new ArgumentNullException(nameof(logController));
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Exceptions caught generally to display to user.")]
         public async Task<Model.UpdateResponse> GetUpdateAvailable()
         {
             _logController.Log(new Model.Logging.Entry(Model.Logging.LogSeverity.Info, Strings.StatusUpdateCheck));
 
-            var httpClient = new HttpClient()
+            using var httpClient = new HttpClient()
             {
                 BaseAddress = new Uri("https://api.github.com/repos/tim-elmer/VoIPainter/releases/latest")
             };
@@ -28,7 +30,7 @@ namespace VoIPainter.Control
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("tim-elmer/VoIPainter");
 
             // The request URI is in our base address, but we need to specify one to match the signature
-            var request = new HttpRequestMessage(HttpMethod.Get, "");
+            using var request = new HttpRequestMessage(HttpMethod.Get, "");
             var keyValues = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("accept", "application/vnd.github.v3+json"),
@@ -40,8 +42,8 @@ namespace VoIPainter.Control
             HttpResponseMessage response;
             try
             {
-                response = await httpClient.SendAsync(request);
-                var responseContent = await response.Content.ReadAsStringAsync();
+                response = await httpClient.SendAsync(request).ConfigureAwait(false);
+                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 var updateResponse = JsonSerializer.Deserialize<Model.UpdateResponse>(responseContent);
 
@@ -58,7 +60,7 @@ namespace VoIPainter.Control
             }
             catch (Exception e)
             {
-                _logController.Log(new Model.Logging.Entry(Model.Logging.LogSeverity.Warning, string.Format(Strings.StatusUpdateCheckFail, e)));
+                _logController.Log(new Model.Logging.Entry(Model.Logging.LogSeverity.Warning, string.Format(CultureInfo.InvariantCulture, Strings.StatusUpdateCheckFail, e)));
             }
 
             return null;

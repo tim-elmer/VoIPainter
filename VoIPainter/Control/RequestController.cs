@@ -4,18 +4,19 @@ using System.Text;
 using System.Net.Http;
 using VoIPainter.Model.Logging;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace VoIPainter.Control
 {
     /// <summary>
     /// Handle making requests to the phone
     /// </summary>
-    public class RequestController
+    public class RequestController : IDisposable
     {
         private HttpClient _httpClient;
         private readonly HttpClientHandler _httpClientHandler;
         private readonly MainController _mainController;
-        private LogController _logController;
+        private readonly LogController _logController;
 
         //public event EventHandler LoggingEvent;
 
@@ -49,7 +50,7 @@ namespace VoIPainter.Control
             };
 
             // Tell the phone we want to do something
-            var request = new HttpRequestMessage(HttpMethod.Post, "/CGI/Execute");
+            using var request = new HttpRequestMessage(HttpMethod.Post, "/CGI/Execute");
 
             // The command
             var keyValues = new List<KeyValuePair<string, string>>
@@ -65,16 +66,32 @@ namespace VoIPainter.Control
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_mainController.SettingsController.LastUser}:{password}")));
 
             // Send command
-            var response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
 
             // Handle response
-            var responseContent = await response.Content.ReadAsStringAsync();
-            _logController.Log(new Entry(responseContent.Contains("success", StringComparison.OrdinalIgnoreCase) ? LogSeverity.Info : LogSeverity.Error, string.Format(Strings.TGotResponse, response.StatusCode, responseContent)));
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            _logController.Log(new Entry(responseContent.Contains("success", StringComparison.OrdinalIgnoreCase) ? LogSeverity.Info : LogSeverity.Error, string.Format(CultureInfo.InvariantCulture, Strings.TGotResponse, response.StatusCode, responseContent)));
 
             // Clear credentials
             _httpClient.DefaultRequestHeaders.Authorization = null;
             GC.Collect();
         }
 
+        protected virtual void Dispose(bool disposeManaged)
+        {
+            if (disposeManaged)
+            {
+                if (!(_httpClient is null))
+                    _httpClient.Dispose();
+                if (!(_httpClientHandler is null))
+                    _httpClientHandler.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

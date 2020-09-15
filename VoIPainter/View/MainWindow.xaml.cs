@@ -2,7 +2,9 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using VoIPainter.Model;
 using VoIPainter.Model.Logging;
@@ -45,25 +47,25 @@ namespace VoIPainter.View
 
         private void CheckForUpdates()
         {
-            _mainController.UpdateCheckController.GetUpdateAvailable().ContinueWith((task) =>
-            {
+            _ = _mainController.UpdateCheckController.GetUpdateAvailable().ContinueWith((task) =>
+              {
 
-                var response = task.Result;
-                if (response is null)
-                    return;
+                  var response = task.Result;
+                  if (response is null)
+                      return;
 
-                Dispatcher.Invoke(() =>
-                {
-                    switch (MessageBox.Show(string.Format(Strings.MessageBoxUpdateAvailableText, response.TagName, response.PublishedAt.ToLocalTime(), response.Body), Strings.MessageBoxUpdateAvailableCaption, MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes))
-                    {
-                        case MessageBoxResult.Yes:
-                            Common.OpenLink(response.HtmlUrl);
-                            break;
-                        case MessageBoxResult.No:
-                            break;
-                    }
-                });
-            });
+                  Dispatcher.Invoke(() =>
+                  {
+                      switch (MessageBox.Show(string.Format(CultureInfo.InvariantCulture, Strings.MessageBoxUpdateAvailableText, response.TagName, response.PublishedAt.ToLocalTime(), response.Body), Strings.MessageBoxUpdateAvailableCaption, MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes))
+                      {
+                          case MessageBoxResult.Yes:
+                              UICommon.OpenLink(response.HtmlUrl);
+                              break;
+                          case MessageBoxResult.No:
+                              break;
+                      }
+                  });
+              }, TaskScheduler.Default);
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e) => Browse();
@@ -76,12 +78,13 @@ namespace VoIPainter.View
                 _mainController.ImageReformatController.Path = _openFileDialog.FileName;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "General exceptions caught for user feedback")]
         private async void Apply()
         {            
             
             try
             {                
-                await _mainController.RequestController.Send(passwordBox.Password);
+                await _mainController.RequestController.Send(passwordBox.Password).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -98,7 +101,7 @@ namespace VoIPainter.View
 
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e) => new AboutWindow().ShowDialog();
 
-        private void HelpMenuItem_Click(object sender, RoutedEventArgs e) => Common.OpenLink("https://github.com/tim-elmer/VoIPainter/wiki");
+        private void HelpMenuItem_Click(object sender, RoutedEventArgs e) => UICommon.OpenLink(new Uri("https://github.com/tim-elmer/VoIPainter/wiki"));
 
         private void SettingsMenuItem_Click(object sender, RoutedEventArgs e) => new SettingsWindow(_mainController.SettingsController).ShowDialog();
 

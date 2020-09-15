@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using VoIPainter.Model.Logging;
 
 namespace VoIPainter.Control
@@ -12,8 +14,11 @@ namespace VoIPainter.Control
 
         public void Log(Entry entry)
         {
+            if (entry is null)
+                throw new ArgumentNullException(nameof(entry));
+
             System.Windows.Application.Current.Dispatcher.Invoke(() => LogEntries.Add(entry));
-            System.IO.File.AppendAllText(".\\VoIPainter.log", string.Format($"{Strings.LogFormat}\r\n", entry.Time, entry.Severity, entry.Message));
+            System.IO.File.AppendAllText(".\\VoIPainter.log", string.Format(CultureInfo.InvariantCulture, $"{Strings.LogFormat}\r\n", entry.Time, entry.Severity, entry.Message));
         }
     }
 }
