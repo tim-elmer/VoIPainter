@@ -17,5 +17,11 @@
     <Setting Name="UpgradeRequired" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="AutoDuckContrast" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="TargetContrast" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.06</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

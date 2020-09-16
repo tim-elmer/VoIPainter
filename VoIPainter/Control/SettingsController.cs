@@ -94,6 +94,33 @@ namespace VoIPainter.Control
         /// </summary>
         public static Dictionary<ImageResizeMode.Mode, string> ImageResizeModeNames => ImageResizeMode.ModeNames;
 
+        /// <summary>
+        /// If image contrast should duck automatically
+        /// </summary>
+        public bool AutoDuckContrast
+        {
+            get => Settings.Default.AutoDuckContrast;
+            set
+            {
+                Settings.Default.AutoDuckContrast = value;
+                OnPropertyChanged(nameof(AutoDuckContrast));
+                Settings.Default.Save();
+            }
+        }
+        
+        public float TargetContrast
+        {
+            get => Settings.Default.TargetContrast;
+            set
+            {
+                if (value < 0 || value > 1)
+                    throw new ArgumentOutOfRangeException(nameof(TargetContrast));
+                Settings.Default.TargetContrast = value;
+                OnPropertyChanged(nameof(TargetContrast));
+                Settings.Default.Save();
+            }
+        }
+
         public SettingsController(LogController logController)
         {
             _logController = logController ?? throw new ArgumentNullException(nameof(logController));
@@ -107,6 +134,9 @@ namespace VoIPainter.Control
 
                 _logController.Log(new Entry(LogSeverity.Info, Strings.StatusUpgradeSettings));
             }
+
+            if (string.IsNullOrWhiteSpace(LastUser))
+                LastUser = Environment.UserName;
         }
 
         private void OnPropertyChanged(string property) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));

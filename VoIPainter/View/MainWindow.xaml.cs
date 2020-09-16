@@ -45,6 +45,8 @@ namespace VoIPainter.View
             CheckForUpdates();
         }
 
+        public MessageBoxResult ShowMessageBox(string text, string caption, MessageBoxButton button, MessageBoxImage icon, MessageBoxResult defaultResult, MessageBoxOptions options) => MessageBox.Show(this, text, caption, button, icon, defaultResult, options);
+
         private void CheckForUpdates()
         {
             _ = _mainController.UpdateCheckController.GetUpdateAvailable().ContinueWith((task) =>

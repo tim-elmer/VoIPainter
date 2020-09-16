@@ -61,6 +61,15 @@ namespace VoIPainter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image contrast automatically lowered.
+        /// </summary>
+        internal static string AutoDuckedContrast {
+            get {
+                return ResourceManager.GetString("AutoDuckedContrast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Center.
         /// </summary>
         internal static string ImageResizeModeCenter {
@@ -141,6 +150,24 @@ namespace VoIPainter {
         internal static string MessageBoxUpdateAvailableText {
             get {
                 return ResourceManager.GetString("MessageBoxUpdateAvailableText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to High Contrast.
+        /// </summary>
+        internal static string MessageBoxWarnContrastCaption {
+            get {
+                return ResourceManager.GetString("MessageBoxWarnContrastCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected image has a high contrast. It may be difficult to read UI elements. Attempt to lower contrast?.
+        /// </summary>
+        internal static string MessageBoxWarnContrastText {
+            get {
+                return ResourceManager.GetString("MessageBoxWarnContrastText", resourceCulture);
             }
         }
         

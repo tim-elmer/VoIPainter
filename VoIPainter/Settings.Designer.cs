@@ -82,5 +82,29 @@ namespace VoIPainter {
                 this["UpgradeRequired"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoDuckContrast {
+            get {
+                return ((bool)(this["AutoDuckContrast"]));
+            }
+            set {
+                this["AutoDuckContrast"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.06")]
+        public float TargetContrast {
+            get {
+                return ((float)(this["TargetContrast"]));
+            }
+            set {
+                this["TargetContrast"] = value;
+            }
+        }
     }
 }

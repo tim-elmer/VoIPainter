@@ -15,8 +15,8 @@ namespace VoIPainter.Control
         public ImageServerController ImageServerController { get; }
         public RequestController RequestController { get; }
         public UpdateCheckController UpdateCheckController { get; }
-
         public ImageReformatController ImageReformatController { get; }
+        public View.MainWindow MainWindow { get; }
 
         public MainController()
         {
@@ -29,8 +29,8 @@ namespace VoIPainter.Control
             ImageServerController = new ImageServerController(this);
             RequestController = new RequestController(this);
             UpdateCheckController = new UpdateCheckController(LogController);
-
-            new View.MainWindow(this).Show();
+            MainWindow = new View.MainWindow(this);
+            MainWindow.Show();
         }
     }
 }

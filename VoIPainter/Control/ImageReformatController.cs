@@ -18,7 +18,7 @@ namespace VoIPainter.Control
     {
         private string _path;
         private readonly MainController _mainController;
-        private LogController _logController;
+        private readonly LogController _logController;
 
         /// <summary>
         /// The path to the image
@@ -76,6 +76,7 @@ namespace VoIPainter.Control
                 {
                     case nameof(SettingsController.LastModel):
                     case nameof(SettingsController.ResizeMode):
+                    case nameof(SettingsController.TargetContrast):
                         Format();
                         break;
                 }
@@ -98,8 +99,18 @@ namespace VoIPainter.Control
 
             var contrast = Contrast(orig);
 
-            if (contrast > .6f)
-                _logController.Log(new Entry(LogSeverity.Warning, Strings.WarnImageContrast));
+            if (contrast > _mainController.SettingsController.TargetContrast)
+            {
+                if (_mainController.SettingsController.AutoDuckContrast)
+                {
+                    Duck(orig, contrast);
+                    _logController.Log(new Entry(LogSeverity.Info, Strings.AutoDuckedContrast));
+                }
+                else if (_mainController.MainWindow.ShowMessageBox(Strings.MessageBoxWarnContrastText, Strings.MessageBoxWarnContrastCaption, System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question, System.Windows.MessageBoxResult.Yes, System.Windows.MessageBoxOptions.None) == System.Windows.MessageBoxResult.Yes)
+                    Duck(orig, contrast);
+                else
+                    _logController.Log(new Entry(LogSeverity.Warning, Strings.WarnImageContrast));
+            }
 
             var imageResizeOptions = new ResizeOptions
             {
@@ -125,6 +136,10 @@ namespace VoIPainter.Control
                     break;
             }
 
+            if (!(Image is null))
+                Image.Dispose();
+            if (!(Thumbnail is null))
+                Thumbnail.Dispose();
             Image = orig.Clone(i => i.Resize(imageResizeOptions));
             Thumbnail = orig.Clone(i => i.Resize(thumbnailResizeOptions));
 
@@ -142,6 +157,8 @@ namespace VoIPainter.Control
             else
                 Image.SaveAsPng(stream, PngEncoder);
         }
+
+        private void Duck(Image orig, float contrast) => orig.Mutate(i => i.Contrast(_mainController.SettingsController.TargetContrast / contrast).Brightness(1 + (_mainController.SettingsController.TargetContrast / contrast)));
 
         /// <summary>
         /// Determine the contrast of an image.
@@ -164,7 +181,7 @@ namespace VoIPainter.Control
                     totalIntensity += (span[x].R / 255f + span[x].G / 255f + span[x].B / 255f) / 3f;
             }
 
-            var avgIntensity = totalIntensity / 10_000f;
+            var avgIntensity = totalIntensity / (small.Height * small.Width);
 
             var sum = 0f;
 
@@ -175,7 +192,7 @@ namespace VoIPainter.Control
                     sum += MathF.Pow((((span[x].R / 255f + span[x].G / 255f + span[x].B / 255f) / 3f) - avgIntensity) / avgIntensity, 2f);
             }
 
-            return MathF.Sqrt(sum / 10_000f);
+            return MathF.Sqrt(sum / (small.Height * small.Width));
         }
     }
 }
