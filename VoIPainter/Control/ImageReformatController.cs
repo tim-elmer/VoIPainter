@@ -19,6 +19,7 @@ namespace VoIPainter.Control
         private string _path;
         private readonly MainController _mainController;
         private readonly LogController _logController;
+        private Image _original;
 
         /// <summary>
         /// The path to the image
@@ -29,6 +30,7 @@ namespace VoIPainter.Control
             set
             {
                 _path = value;
+                _original = Image.Load(Path);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Path)));
                 Format();
             }
@@ -95,19 +97,18 @@ namespace VoIPainter.Control
 
             _logController.Log(new Entry(LogSeverity.Info, Strings.StatusFormattingImage));
 
-            var orig = Image.Load(Path);
-
-            var contrast = Contrast(orig);
+            var contrast = Contrast(_original);
+            using var working = _original.CloneAs< SixLabors.ImageSharp.PixelFormats.Rgb24>();
 
             if (contrast > _mainController.SettingsController.TargetContrast)
             {
                 if (_mainController.SettingsController.AutoDuckContrast)
                 {
-                    Duck(orig, contrast);
+                    Duck(working, contrast);
                     _logController.Log(new Entry(LogSeverity.Info, Strings.AutoDuckedContrast));
                 }
                 else if (_mainController.MainWindow.ShowMessageBox(Strings.MessageBoxWarnContrastText, Strings.MessageBoxWarnContrastCaption, System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question, System.Windows.MessageBoxResult.Yes, System.Windows.MessageBoxOptions.None) == System.Windows.MessageBoxResult.Yes)
-                    Duck(orig, contrast);
+                    Duck(working, contrast);
                 else
                     _logController.Log(new Entry(LogSeverity.Warning, Strings.WarnImageContrast));
             }
@@ -140,10 +141,8 @@ namespace VoIPainter.Control
                 Image.Dispose();
             if (!(Thumbnail is null))
                 Thumbnail.Dispose();
-            Image = orig.Clone(i => i.Resize(imageResizeOptions));
-            Thumbnail = orig.Clone(i => i.Resize(thumbnailResizeOptions));
-
-            orig.Dispose();
+            Image = working.Clone(i => i.Resize(imageResizeOptions));
+            Thumbnail = working.Clone(i => i.Resize(thumbnailResizeOptions));
 
             _logController.Log(new Entry(LogSeverity.Info, Strings.StatusFormattingImageDone));
 
@@ -158,7 +157,7 @@ namespace VoIPainter.Control
                 Image.SaveAsPng(stream, PngEncoder);
         }
 
-        private void Duck(Image orig, float contrast) => orig.Mutate(i => i.Contrast(_mainController.SettingsController.TargetContrast / contrast).Brightness(1 + (_mainController.SettingsController.TargetContrast / contrast)));
+        private void Duck(Image orig, float contrast) => orig.Mutate(i => i.Contrast(_mainController.SettingsController.TargetContrast / contrast).Brightness(MathF.Max(MathF.Min(MathF.Log(contrast + 1), .25f) / _mainController.SettingsController.TargetContrast, 1)));
 
         /// <summary>
         /// Determine the contrast of an image.
