@@ -377,5 +377,14 @@ namespace VoIPainter {
                 return ResourceManager.GetString("ValidationUsername", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected image has a high contrast. It may be difficult to read UI elements..
+        /// </summary>
+        internal static string WarnImageContrast {
+            get {
+                return ResourceManager.GetString("WarnImageContrast", resourceCulture);
+            }
+        }
     }
 }

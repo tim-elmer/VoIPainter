@@ -96,6 +96,11 @@ namespace VoIPainter.Control
 
             var orig = Image.Load(Path);
 
+            var contrast = Contrast(orig);
+
+            if (contrast > .6f)
+                _logController.Log(new Entry(LogSeverity.Warning, Strings.WarnImageContrast));
+
             var imageResizeOptions = new ResizeOptions
             {
                 Size = Phone.Models[_mainController.SettingsController.LastModel].ImageSize
@@ -136,6 +141,41 @@ namespace VoIPainter.Control
                 Thumbnail.SaveAsPng(stream, PngEncoder);
             else
                 Image.SaveAsPng(stream, PngEncoder);
+        }
+
+        /// <summary>
+        /// Determine the contrast of an image.
+        /// </summary>
+        /// <param name="image">Image to analyze</param>
+        /// <returns>RMS contrast</returns>
+        /// <remarks>Uses RMS: sqrt(1 / (M * N) * sum(N - 1, i = 0, sum(M - 1, j = 0, ((I_ij - mean(I)) / mean(I)) ^ 2)))</remarks>
+        private static float Contrast(Image image)
+        {
+            var totalIntensity = 0f;
+
+            using var small = image.CloneAs<SixLabors.ImageSharp.PixelFormats.Rgb24>();
+            
+            // Resize for speed
+            small.Mutate(i => i.Resize(100, 100));
+            for (int y = 0; y < small.Height; y++)
+            {
+                var span = small.GetPixelRowSpan(y);
+                for (int x = 0; x < span.Length; x++)
+                    totalIntensity += (span[x].R / 255f + span[x].G / 255f + span[x].B / 255f) / 3f;
+            }
+
+            var avgIntensity = totalIntensity / 10_000f;
+
+            var sum = 0f;
+
+            for (int y = 0; y < small.Height; y++)
+            {
+                var span = small.GetPixelRowSpan(y);
+                for (int x = 0; x < span.Length; x++)
+                    sum += MathF.Pow((((span[x].R / 255f + span[x].G / 255f + span[x].B / 255f) / 3f) - avgIntensity) / avgIntensity, 2f);
+            }
+
+            return MathF.Sqrt(sum / 10_000f);
         }
     }
 }

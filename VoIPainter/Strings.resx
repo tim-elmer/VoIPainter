@@ -239,4 +239,7 @@ Release Notes: {2}</value>
   <data name="ValidationUsername" xml:space="preserve">
     <value>A username is required</value>
   </data>
+  <data name="WarnImageContrast" xml:space="preserve">
+    <value>The selected image has a high contrast. It may be difficult to read UI elements.</value>
+  </data>
 </root>
