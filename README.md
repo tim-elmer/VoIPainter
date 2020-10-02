@@ -8,6 +8,7 @@ VoIPainter is a simple Windows utility designed to change the background on a us
 
 - The phone must be owned by the executing user in CUCM.
 - Personalization must be enabled on the phone in CUCM.
+- The phone must have web access enabled in CUCM (the commands are sent to it via HTTP).
 - The executing user must have *at least* local administrative privileges; VoIPainter will open a socket on TCP port 80, which requires administrative rights.
 
 ## Use
