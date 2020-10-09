@@ -35,6 +35,9 @@ namespace VoIPainter.Control
             }
         }
 
+        /// <summary>
+        /// The username
+        /// </summary>
         public string LastUser
         {
             get => Settings.Default.LastUser;
@@ -82,7 +85,7 @@ namespace VoIPainter.Control
             set
             {
                 if (!Enum.GetNames(typeof(ImageResizeMode.Mode)).Contains(value.ToString()))
-                    throw new ArgumentOutOfRangeException(nameof(ResizeMode));
+                    throw new ArgumentOutOfRangeException(nameof(ResizeMode), Strings.ValidationResizeMode);
                 Settings.Default.ResizeMode = value.ToString();
                 OnPropertyChanged(nameof(ResizeMode));
                 Settings.Default.Save();
@@ -108,15 +111,34 @@ namespace VoIPainter.Control
             }
         }
         
+        /// <summary>
+        /// The desired contrast level
+        /// </summary>
         public float TargetContrast
         {
             get => Settings.Default.TargetContrast;
             set
             {
                 if (value < 0 || value > 1)
-                    throw new ArgumentOutOfRangeException(nameof(TargetContrast));
+                    throw new ArgumentOutOfRangeException(nameof(TargetContrast), Strings.ValdidationTargetContrast);
                 Settings.Default.TargetContrast = value;
                 OnPropertyChanged(nameof(TargetContrast));
+                Settings.Default.Save();
+            }
+        }
+
+        /// <summary>
+        /// The time taken to fade the ringtone out, in seconds.
+        /// </summary>
+        public double FadeOutTime
+        {
+            get => Settings.Default.FadeOutTime;
+            set
+            {
+                if (value < 0 || value > 20)
+                    throw new ArgumentOutOfRangeException(nameof(FadeOutTime), Strings.ValidationFadeOutTime);
+                Settings.Default.FadeOutTime = value;
+                OnPropertyChanged(nameof(FadeOutTime));
                 Settings.Default.Save();
             }
         }
@@ -125,7 +147,7 @@ namespace VoIPainter.Control
         {
             _logController = logController ?? throw new ArgumentNullException(nameof(logController));
 
-            // Borrowed from https://stackoverflow.com/a/2698338
+            // Borrowed from https://stackoverflow.com/a/2698338 to handle version upgrades
             if (Settings.Default.UpgradeRequired)
             {
                 Settings.Default.Upgrade();
@@ -135,6 +157,7 @@ namespace VoIPainter.Control
                 _logController.Log(new Entry(LogSeverity.Info, Strings.StatusUpgradeSettings));
             }
 
+            // Borrow the username from the user's session if not present in the settings
             if (string.IsNullOrWhiteSpace(LastUser))
                 LastUser = Environment.UserName;
         }

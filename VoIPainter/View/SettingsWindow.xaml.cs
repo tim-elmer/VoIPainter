@@ -8,10 +8,12 @@ namespace VoIPainter.View
     /// </summary>
     public partial class SettingsWindow : Window
     {
+        private readonly Control.SettingsController _settingsController;
+
         public SettingsWindow(Control.SettingsController settingsController)
         {
             InitializeComponent();
-            DataContext = settingsController ?? throw new ArgumentNullException(nameof(settingsController));
+            DataContext = _settingsController = settingsController ?? throw new ArgumentNullException(nameof(settingsController));
         }
     }
 }

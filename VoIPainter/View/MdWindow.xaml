@@ -1,0 +1,20 @@
+﻿<Window x:Class="VoIPainter.View.MdWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VoIPainter.View"
+        xmlns:md="clr-namespace:Neo.Markdig.Xaml;assembly=Neo.Markdig.Xaml"
+        mc:Ignorable="d"
+        Title="About" 
+        Height="500" 
+        Width="800" 
+        WindowStyle="ToolWindow">
+    <FrameworkElement.CommandBindings>
+        <CommandBinding Command="{x:Static md:MarkdownXaml.Hyperlink}" Executed="OpenHyperlink"/>
+    </FrameworkElement.CommandBindings>
+    <Grid Margin="5,5,5,5">
+        <FlowDocumentScrollViewer x:Name="FlowDocumentScrollViewer"/>
+        <!--<markdig:MarkdownViewer x:Name="MarkdownViewer"/>-->
+    </Grid>
+</Window>

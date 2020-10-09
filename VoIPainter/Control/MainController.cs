@@ -10,12 +10,12 @@ namespace VoIPainter.Control
         private static MainController _instance;
 
         public SettingsController SettingsController { get; }
-
         public LogController LogController { get; } = new LogController();
-        public ImageServerController ImageServerController { get; }
+        public ServerController ImageServerController { get; }
         public RequestController RequestController { get; }
         public UpdateCheckController UpdateCheckController { get; }
         public ImageReformatController ImageReformatController { get; }
+        public RingtoneReformatController RingtoneReformatController { get; }
         public View.MainWindow MainWindow { get; }
 
         public MainController()
@@ -24,12 +24,16 @@ namespace VoIPainter.Control
                 throw new InvalidOperationException();
             _instance = this;
 
+            #region Initialize
             SettingsController = new SettingsController(LogController);
             ImageReformatController = new ImageReformatController(this);
-            ImageServerController = new ImageServerController(this);
+            RingtoneReformatController = new RingtoneReformatController(this);
+            ImageServerController = new ServerController(this);
             RequestController = new RequestController(this);
             UpdateCheckController = new UpdateCheckController(LogController);
             MainWindow = new View.MainWindow(this);
+            #endregion Initialize
+
             MainWindow.Show();
         }
     }

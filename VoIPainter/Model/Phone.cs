@@ -1,4 +1,5 @@
 ﻿using SixLabors.ImageSharp;
+using System;
 using System.Collections.Generic;
 
 namespace VoIPainter.Model
@@ -11,8 +12,8 @@ namespace VoIPainter.Model
         private static readonly ScreenInfo SI_C_240_320_117_117 = new ScreenInfo(new Size(250, 320), new Size(117, 117));
         private static readonly ScreenInfo SI_C_800_480_139_109 = new ScreenInfo(new Size(800, 480), new Size(139, 109));
         private static readonly ScreenInfo SI_C_640_480_123_111 = new ScreenInfo(new Size(640, 480), new Size(123, 111));
-        private static readonly ScreenInfo SI_C_272_480_139_109 = new ScreenInfo(new Size(272, 480), new Size(139, 109));
-        private static readonly ScreenInfo SI_C_320_480_139_109 = new ScreenInfo(new Size(320, 480), new Size(139, 109));
+        private static readonly ScreenInfo SI_C_272_480_139_109 = new ScreenInfo(new Size(272, 480), new Size(139, 109));   // KEM
+        private static readonly ScreenInfo SI_C_320_480_139_109 = new ScreenInfo(new Size(320, 480), new Size(139, 109));   // KEM
 
         /// <summary>
         /// Specifies known models and their required image dimensions
@@ -36,7 +37,7 @@ namespace VoIPainter.Model
             { "8865", SI_C_800_480_139_109 },
             { "8941", SI_C_640_480_123_111 },
             { "8945", SI_C_640_480_123_111 },
-            // Not sure that this'll work as-is with KEMs.
+            // KEMs
             //{ "8800 BEKEM", SI_C_272_480_139_109 },
             //{ "8851 BEKEM", SI_C_320_480_139_109 },
             //{ "8861 BEKEM", SI_C_320_480_139_109 },
@@ -45,8 +46,25 @@ namespace VoIPainter.Model
             { "9971", SI_C_640_480_123_111 }
         };
 
+        /// <summary>
+        /// Get the length of the ringtone for the specified model
+        /// </summary>
+        /// <param name="model">Phone model</param>
+        /// <returns>Length in samples</returns>
+        public static int RingLength(string model)
+        {
+            if (string.IsNullOrWhiteSpace(model))
+                throw new ArgumentNullException(nameof(model));
+            if (!System.Text.RegularExpressions.Regex.IsMatch(model, "^\\d{4}$"))
+                throw new ArgumentException(Strings.ValidationModel, nameof(model));
+            return model.StartsWith("78", StringComparison.InvariantCultureIgnoreCase) || model.StartsWith("88", StringComparison.InvariantCultureIgnoreCase) ? 160_800 : 16_080;
+        }
+
+        /// <summary>
+        /// Represents a screen geometry
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "I don't care.")]
-        public struct ScreenInfo : System.IEquatable<ScreenInfo>
+        public struct ScreenInfo : IEquatable<ScreenInfo>
         {
             public bool Color { get; }
             public Size ImageSize { get; }

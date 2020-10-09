@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
+using NAudio.Wave;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -14,17 +14,30 @@ namespace VoIPainter.View
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IDisposable
     {
         private readonly Control.MainController _mainController;
         private readonly Control.LogController _logController;
-
-        private readonly OpenFileDialog _openFileDialog = new OpenFileDialog();
-
-
-        public ObservableCollection<Tuple<string, string, string>> LogEntries { get; private set; } = new ObservableCollection<Tuple<string, string, string>>();
-
-        public string Error { get; private set; }
+        private readonly OpenFileDialog _imageOpenFileDialog = new OpenFileDialog()
+        {
+            CheckFileExists = true,
+            CheckPathExists = true,
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
+            Multiselect = false,
+            Title = Strings.TitleSelectImage
+        };
+        private readonly OpenFileDialog _ringtoneOpenFileDialog = new OpenFileDialog()
+        {
+            CheckFileExists = true,
+            CheckPathExists = true,
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic),
+            Multiselect = false,
+            Title = Strings.TitleSelectRingtone
+        };
+        private readonly WaveOutEvent _waveOutEvent = new WaveOutEvent
+        {
+            DeviceNumber = -1
+        };
 
         public MainWindow(Control.MainController mainController)
         {
@@ -36,8 +49,17 @@ namespace VoIPainter.View
             PhoneModelComboBox.ItemsSource = Phone.Models;
             LogListBox.ItemsSource = _logController.LogEntries;
             ImageHost.DataContext = _mainController.ImageReformatController;
+            RingtonePathTextBlock.DataContext = _mainController.RingtoneReformatController;
+            //_ringtoneOpenFileDialog.Filter = _mainController.FileFilter.AudioFilter;
+            //_imageOpenFileDialog.Filter = _mainController.FileFilter.ImageFilter;
 
             _logController.LogEntries.CollectionChanged += (s, e) => Dispatcher.Invoke(() => LogListBox.ScrollIntoView(_mainController.LogController.LogEntries.Last()));
+
+            _mainController.RingtoneReformatController.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName.Equals(nameof(Control.RingtoneReformatController.Ringtone), StringComparison.Ordinal))
+                    _waveOutEvent.Stop();
+            };
 
             _mainController.ImageServerController.Run();
 
@@ -45,7 +67,10 @@ namespace VoIPainter.View
             CheckForUpdates();
         }
 
-        public MessageBoxResult ShowMessageBox(string text, string caption, MessageBoxButton button, MessageBoxImage icon, MessageBoxResult defaultResult, MessageBoxOptions options) => MessageBox.Show(this, text, caption, button, icon, defaultResult, options);
+        /// <summary>
+        /// Show a message box. This is mostly a pass-thru for non UI elements that need one.
+        /// </summary>
+        public MessageBoxResult ShowMessageBox(string text, string caption, MessageBoxButton button, MessageBoxImage icon, MessageBoxResult defaultResult, MessageBoxOptions options = MessageBoxOptions.None) => MessageBox.Show(this, text, caption, button, icon, defaultResult, options);
 
         private void CheckForUpdates()
         {
@@ -58,10 +83,10 @@ namespace VoIPainter.View
 
                   Dispatcher.Invoke(() =>
                   {
-                      switch (MessageBox.Show(string.Format(CultureInfo.InvariantCulture, Strings.MessageBoxUpdateAvailableText, response.TagName, response.PublishedAt.ToLocalTime(), response.Body), Strings.MessageBoxUpdateAvailableCaption, MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes))
+                      switch (ShowMessageBox(string.Format(CultureInfo.InvariantCulture, Strings.MessageBoxUpdateAvailableText, response.TagName, response.PublishedAt.ToLocalTime(), response.Body), Strings.MessageBoxUpdateAvailableCaption, MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes))
                       {
                           case MessageBoxResult.Yes:
-                              UICommon.OpenLink(response.HtmlUrl);
+                              UICommon.OpenLink(response.HtmlUrl.AbsoluteUri);
                               break;
                           case MessageBoxResult.No:
                               break;
@@ -70,14 +95,23 @@ namespace VoIPainter.View
               }, TaskScheduler.Default);
         }
 
-        private void BrowseButton_Click(object sender, RoutedEventArgs e) => Browse();
+        private void BrowseImageButton_Click(object sender, RoutedEventArgs e) => Browse(RequestMode.Background, _imageOpenFileDialog);
+        private void BrowseToneButton_Click(object sender, RoutedEventArgs e) => Browse(RequestMode.Ringtone, _ringtoneOpenFileDialog);
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e) => Apply();
 
-        private void Browse()
+        private void Browse(RequestMode mode, OpenFileDialog dialog)
         {
-            if (_openFileDialog.ShowDialog().GetValueOrDefault())
-                _mainController.ImageReformatController.Path = _openFileDialog.FileName;
+            if (dialog.ShowDialog().GetValueOrDefault())
+                switch (mode)
+                {
+                    case RequestMode.Background:
+                        _mainController.ImageReformatController.Path = dialog.FileName;
+                        break;
+                    case RequestMode.Ringtone:
+                        _mainController.RingtoneReformatController.Path = dialog.FileName;
+                        break;
+                }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "General exceptions caught for user feedback")]
@@ -85,8 +119,11 @@ namespace VoIPainter.View
         {            
             
             try
-            {                
-                await _mainController.RequestController.Send(passwordBox.Password).ConfigureAwait(false);
+            {
+                if (!(_mainController.ImageReformatController.Image is null))
+                    await _mainController.RequestController.Send(passwordBox.Password, RequestMode.Background).ConfigureAwait(false);
+                if (!(_mainController.RingtoneReformatController.Ringtone is null))
+                    await _mainController.RequestController.Send(passwordBox.Password, RequestMode.Ringtone).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -101,12 +138,37 @@ namespace VoIPainter.View
             _mainController.ImageServerController.Stop();
         }
 
-        private void AboutMenuItem_Click(object sender, RoutedEventArgs e) => new AboutWindow().ShowDialog();
+        private void AboutMenuItem_Click(object sender, RoutedEventArgs e) => new MdWindow("ABOUT.md").ShowDialog();
 
-        private void HelpMenuItem_Click(object sender, RoutedEventArgs e) => UICommon.OpenLink(new Uri("https://github.com/tim-elmer/VoIPainter/wiki"));
+        private void HelpMenuItem_Click(object sender, RoutedEventArgs e) => new MdWindow("README.md").Show();
 
         private void SettingsMenuItem_Click(object sender, RoutedEventArgs e) => new SettingsWindow(_mainController.SettingsController).ShowDialog();
 
         private void CheckForUpdatesMenuItem_Click(object sender, RoutedEventArgs e) => CheckForUpdates();
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposed in anonymous callback.")]
+        private void PlayRingtoneButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(_waveOutEvent is null))
+                _waveOutEvent.Stop();
+            if (_mainController.RingtoneReformatController.Ringtone is null)
+                return;
+
+            _mainController.RingtoneReformatController.Ringtone.Position = 0;
+            _waveOutEvent.Init(new RawSourceWaveStream(_mainController.RingtoneReformatController.Ringtone, Control.RingtoneReformatController.WAVE_FORMAT));
+            _waveOutEvent.Play();
+        }
+
+        protected virtual void Dispose(bool disposeManaged)
+        {
+            if (!(_waveOutEvent is null))
+                _waveOutEvent.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

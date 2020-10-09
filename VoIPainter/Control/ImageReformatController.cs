@@ -21,16 +21,26 @@ namespace VoIPainter.Control
         private readonly LogController _logController;
         private Image _original;
 
+
         /// <summary>
         /// The path to the image
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "General exceptions caught for display to user")]
         public string Path
         {
             get => _path;
             set
             {
                 _path = value;
-                _original = Image.Load(Path);
+                try
+                {
+                    _original = Image.Load(Path);
+                }
+                catch (Exception e)
+                {
+                    _logController.Log(new Entry(LogSeverity.Error, e.Message));
+                    return;
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Path)));
                 Format();
             }

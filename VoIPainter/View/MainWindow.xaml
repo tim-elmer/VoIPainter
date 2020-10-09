@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="VoIPainter" 
-        Height="450px" 
+        Height="500px" 
         Width="800px"
         MinHeight="100px"
         MinWidth="200px"
@@ -26,13 +26,15 @@
                    VerticalAlignment="Center"/>
             <TextBox Text="{Binding Path=LastTarget, Mode=TwoWay, ValidatesOnExceptions=True}" 
                      Grid.Column="1" 
-                     VerticalContentAlignment="Center"/>
+                     VerticalContentAlignment="Center"
+                     Style="{StaticResource textBoxInvalidated}"/>
             <Label Content="Username" 
                    Grid.Column="2" 
                    VerticalAlignment="Center"/>
             <TextBox Text="{Binding Path=LastUser, Mode=TwoWay, ValidatesOnExceptions=True}" 
                      Grid.Column="3" 
-                     VerticalContentAlignment="Center"/>
+                     VerticalContentAlignment="Center"
+                     Style="{StaticResource textBoxInvalidated}"/>
             <Label Content="Password"
                    Grid.Column="4" 
                    VerticalAlignment="Center"/>
@@ -45,8 +47,11 @@
                     IsDefault="True"/>
         </Grid>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Browse..." 
-                      Click="BrowseButton_Click"/>
+            <MenuItem Header="Browse Image..." 
+                      Click="BrowseImageButton_Click"/>
+            <MenuItem Header="Browse Ringtone..." 
+                      Click="BrowseToneButton_Click"
+                      IsEnabled="{Binding Path=SoxPath, Mode=OneWay, Converter={StaticResource IsStringNotNullOrWhitespaceConverter}}"/>
             <MenuItem Header="Settings"
                       Click="SettingsMenuItem_Click"/>
             <MenuItem Header="Help">
@@ -74,8 +79,21 @@
                    Source="{Binding Path=ImagePreview, Mode=OneWay}" 
                    Stretch="Uniform" 
                    Grid.Row="0"
-                   Grid.Column="0"
-                   Grid.RowSpan="2"/>
+                   Grid.Column="0"/>
+            <Grid Grid.Row="1"
+                  Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Content="▶️"
+                        Click="PlayRingtoneButton_Click"/>
+                <TextBlock Grid.Column="1"
+                           x:Name="RingtonePathTextBlock"
+                           Text="{Binding Path=Path, FallbackValue='No ringtone loaded', Mode=OneWay, TargetNullValue='No ringtone loaded'}" 
+                           VerticalAlignment="Center"/>
+            </Grid>
             <GridSplitter Grid.Row="0"
                           Grid.Column="1" 
                           Grid.RowSpan="2"

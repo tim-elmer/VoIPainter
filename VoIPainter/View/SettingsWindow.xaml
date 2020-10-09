@@ -16,7 +16,7 @@
         <ComboBox HorizontalAlignment="Left" 
                   Margin="85,3,0,0" 
                   VerticalAlignment="Top" 
-                  Width="200"
+                  Width="211"
                   ItemsSource="{Binding Path=ImageResizeModeNames}"
                   DisplayMemberPath="Value"
                   SelectedValuePath="Key"
@@ -43,6 +43,16 @@
                   Margin="165,66,0,0" 
                   VerticalAlignment="Top"
                   IsChecked="{Binding Path=AutoDuckContrast, Mode=TwoWay}"/>
+        <Label Content="Ringtone Fade Out (sec.)" 
+               HorizontalAlignment="Left" 
+               Margin="2,92,0,0" 
+               VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" 
+                 Margin="147,96,0,0"
+                 Text="{Binding Path=FadeOutTime, Mode=TwoWay, Delay=100, ValidatesOnExceptions=True}"
+                 VerticalAlignment="Top"
+                 Width="149"
+                 Style="{StaticResource textBoxInvalidated}"/>
 
     </Grid>
 </Window>
