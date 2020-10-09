@@ -61,11 +61,29 @@ namespace VoIPainter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string AudioFilter {
+            get {
+                return ResourceManager.GetString("AudioFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Image contrast automatically lowered.
         /// </summary>
         internal static string AutoDuckedContrast {
             get {
                 return ResourceManager.GetString("AutoDuckedContrast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File not found.
+        /// </summary>
+        internal static string ErrorNoFile {
+            get {
+                return ResourceManager.GetString("ErrorNoFile", resourceCulture);
             }
         }
         
@@ -172,6 +190,42 @@ namespace VoIPainter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication error.
+        /// </summary>
+        internal static string PhoneErrorAuthentication {
+            get {
+                return ResourceManager.GetString("PhoneErrorAuthentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error framing CiscoIPPhoneResponse object.
+        /// </summary>
+        internal static string PhoneErrorFramingResponse {
+            get {
+                return ResourceManager.GetString("PhoneErrorFramingResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal file error.
+        /// </summary>
+        internal static string PhoneErrorInternalFile {
+            get {
+                return ResourceManager.GetString("PhoneErrorInternalFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error parsing CiscoIPPhoneExecute object.
+        /// </summary>
+        internal static string PhoneErrorParsingRequest {
+            get {
+                return ResourceManager.GetString("PhoneErrorParsingRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Operation canceled.
         /// </summary>
         internal static string StatusCanceled {
@@ -213,6 +267,24 @@ namespace VoIPainter {
         internal static string StatusFormattingImageDone {
             get {
                 return ResourceManager.GetString("StatusFormattingImageDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formatting ringtone....
+        /// </summary>
+        internal static string StatusFormattingTone {
+            get {
+                return ResourceManager.GetString("StatusFormattingTone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done formatting ringtone.
+        /// </summary>
+        internal static string StatusFormattingToneDone {
+            get {
+                return ResourceManager.GetString("StatusFormattingToneDone", resourceCulture);
             }
         }
         
@@ -262,11 +334,20 @@ namespace VoIPainter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} made a request, but the image formatter was not ready.
+        ///   Looks up a localized string similar to {0} made a request, but VoIPainter was not ready.
         /// </summary>
         internal static string StatusPhoneRequestNotReady {
             get {
                 return ResourceManager.GetString("StatusPhoneRequestNotReady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} requested ringtone.
+        /// </summary>
+        internal static string StatusPhoneRequestRingtone {
+            get {
+                return ResourceManager.GetString("StatusPhoneRequestRingtone", resourceCulture);
             }
         }
         
@@ -294,6 +375,15 @@ namespace VoIPainter {
         internal static string StatusReady {
             get {
                 return ResourceManager.GetString("StatusReady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        internal static string StatusSuccess {
+            get {
+                return ResourceManager.GetString("StatusSuccess", resourceCulture);
             }
         }
         
@@ -352,11 +442,56 @@ namespace VoIPainter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Got response: {0}: {1}.
+        ///   Looks up a localized string similar to Select Image.
         /// </summary>
-        internal static string TGotResponse {
+        internal static string TitleSelectImage {
             get {
-                return ResourceManager.GetString("TGotResponse", resourceCulture);
+                return ResourceManager.GetString("TitleSelectImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Ringtone.
+        /// </summary>
+        internal static string TitleSelectRingtone {
+            get {
+                return ResourceManager.GetString("TitleSelectRingtone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request failed: {0}.
+        /// </summary>
+        internal static string TRequestFailed {
+            get {
+                return ResourceManager.GetString("TRequestFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request failed: {0}: {1}.
+        /// </summary>
+        internal static string TRequestFailedMessage {
+            get {
+                return ResourceManager.GetString("TRequestFailedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The target contrast must be between 0 and 1.
+        /// </summary>
+        internal static string ValdidationTargetContrast {
+            get {
+                return ResourceManager.GetString("ValdidationTargetContrast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The fade out time must be between 0 and 20 seconds.
+        /// </summary>
+        internal static string ValidationFadeOutTime {
+            get {
+                return ResourceManager.GetString("ValidationFadeOutTime", resourceCulture);
             }
         }
         
@@ -379,7 +514,7 @@ namespace VoIPainter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A phone model is required.
+        ///   Looks up a localized string similar to Invalid phone model.
         /// </summary>
         internal static string ValidationModel {
             get {
@@ -393,6 +528,15 @@ namespace VoIPainter {
         internal static string ValidationPassword {
             get {
                 return ResourceManager.GetString("ValidationPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid resize mode.
+        /// </summary>
+        internal static string ValidationResizeMode {
+            get {
+                return ResourceManager.GetString("ValidationResizeMode", resourceCulture);
             }
         }
         

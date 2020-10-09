@@ -13,7 +13,7 @@ namespace VoIPainter.View
         /// Open the specified link in the default browser
         /// </summary>
         /// <param name="url"></param>
-        public static void OpenLink(Uri url)
+        public static void OpenLink(string url)
         {
             if (url is null)
                 throw new ArgumentNullException(nameof(url));
@@ -21,15 +21,24 @@ namespace VoIPainter.View
             // Via https://stackoverflow.com/a/43232486
             try
             {
-                Process.Start(url.ToString());
+                Process.Start(url);
             }
             catch
             {
                 // hack because of this: https://github.com/dotnet/corefx/issues/10361
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    url = new Uri(url.ToString().Replace("&", "^&", StringComparison.InvariantCultureIgnoreCase));
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                    Uri uri;
+
+                    try
+                    {
+                        uri = new Uri(url.Replace("&", "^&", StringComparison.InvariantCultureIgnoreCase));
+                    }
+                    catch (UriFormatException)
+                    {
+                        return;
+                    }
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {uri}") { CreateNoWindow = true });
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
