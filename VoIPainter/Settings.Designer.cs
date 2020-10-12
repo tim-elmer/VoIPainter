@@ -97,7 +97,7 @@ namespace VoIPainter {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.06")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.6")]
         public float TargetContrast {
             get {
                 return ((float)(this["TargetContrast"]));
