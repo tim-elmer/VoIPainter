@@ -108,6 +108,8 @@ namespace VoIPainter.Control
                 Settings.Default.AutoDuckContrast = value;
                 OnPropertyChanged(nameof(AutoDuckContrast));
                 Settings.Default.Save();
+                if (value && UseContrastBox)
+                    UseContrastBox = false;
             }
         }
         
@@ -140,6 +142,22 @@ namespace VoIPainter.Control
                 Settings.Default.FadeOutTime = value;
                 OnPropertyChanged(nameof(FadeOutTime));
                 Settings.Default.Save();
+            }
+        }
+
+        /// <summary>
+        /// Whether to use a contrasting box behind lines.
+        /// </summary>
+        public bool UseContrastBox
+        {
+            get => Settings.Default.UseContrastBox;
+            set
+            {
+                Settings.Default.UseContrastBox = value;
+                OnPropertyChanged(nameof(UseContrastBox));
+                Settings.Default.Save();
+                if (value && AutoDuckContrast)
+                    AutoDuckContrast = false;
             }
         }
 

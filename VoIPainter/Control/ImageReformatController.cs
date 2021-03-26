@@ -25,7 +25,6 @@ namespace VoIPainter.Control
         /// <summary>
         /// The path to the image
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "General exceptions caught for display to user")]
         public string Path
         {
             get => _path;
@@ -61,7 +60,6 @@ namespace VoIPainter.Control
                 using var memoryStream = new MemoryStream();
                 Image.Save(memoryStream, PngEncoder);
                 memoryStream.Seek(0, SeekOrigin.Begin);
-
                 var image = new BitmapImage();
                 image.BeginInit();
                 image.CacheOption = BitmapCacheOption.OnLoad;
@@ -103,7 +101,7 @@ namespace VoIPainter.Control
         public void Format()
         {
             if (string.IsNullOrWhiteSpace(Path))
-                throw new ArgumentNullException(nameof(Path), Strings.ValidationImage);
+                return;
 
             _logController.Log(new Entry(LogSeverity.Info, Strings.StatusFormattingImage));
 
@@ -116,6 +114,11 @@ namespace VoIPainter.Control
                 {
                     Duck(working, contrast);
                     _logController.Log(new Entry(LogSeverity.Info, Strings.AutoDuckedContrast));
+                }
+                else if (_mainController.SettingsController.UseContrastBox)
+                {
+                    ContrastBox(working, contrast);
+                    _logController.Log(new Entry(LogSeverity.Info, Strings.ContrastBox));
                 }
                 else if (_mainController.MainWindow.ShowMessageBox(Strings.MessageBoxWarnContrastText, Strings.MessageBoxWarnContrastCaption, System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question, System.Windows.MessageBoxResult.Yes, System.Windows.MessageBoxOptions.None) == System.Windows.MessageBoxResult.Yes)
                     Duck(working, contrast);
@@ -167,7 +170,15 @@ namespace VoIPainter.Control
                 Image.SaveAsPng(stream, PngEncoder);
         }
 
-        private void Duck(Image orig, float contrast) => orig.Mutate(i => i.Contrast(_mainController.SettingsController.TargetContrast / contrast).Brightness(MathF.Max(MathF.Min(MathF.Log(contrast + 1), .25f) / _mainController.SettingsController.TargetContrast, 1)));
+        private void Duck(Image orig, float contrast) => orig.Mutate(i => i.Contrast(_mainController.SettingsController.TargetContrast / contrast).Brightness(DeltaBrightness(contrast)));
+
+        private void ContrastBox(Image orig, float contrast)
+        {
+            Rectangle rectangle = new Rectangle(new Point(0, 0), new Size((int)(orig.Width * 0.445f), orig.Height));
+            orig.Mutate(i => i.Contrast(_mainController.SettingsController.TargetContrast / contrast, rectangle).Brightness(DeltaBrightness(contrast), rectangle));
+        }
+
+        private float DeltaBrightness(float contrast) => MathF.Max(MathF.Min(MathF.Log(contrast + 1), 0.25f) / _mainController.SettingsController.TargetContrast, 1);
 
         /// <summary>
         /// Determine the contrast of an image.

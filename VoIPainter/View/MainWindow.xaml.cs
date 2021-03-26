@@ -114,7 +114,6 @@ namespace VoIPainter.View
                 }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "General exceptions caught for user feedback")]
         private async void Apply()
         {            
             
@@ -146,7 +145,6 @@ namespace VoIPainter.View
 
         private void CheckForUpdatesMenuItem_Click(object sender, RoutedEventArgs e) => CheckForUpdates();
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposed in anonymous callback.")]
         private void PlayRingtoneButton_Click(object sender, RoutedEventArgs e)
         {
             if (!(_waveOutEvent is null))

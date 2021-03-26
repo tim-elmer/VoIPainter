@@ -63,7 +63,6 @@ namespace VoIPainter.Model
         /// <summary>
         /// Represents a screen geometry
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "I don't care.")]
         public struct ScreenInfo : IEquatable<ScreenInfo>
         {
             public bool Color { get; }

@@ -59,7 +59,6 @@ namespace VoIPainter.Control
         /// <summary>
         /// Read and format the ringtone
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Exceptions caught generally for display to user")]
         public void Format()
         {
             if (string.IsNullOrWhiteSpace(Path))

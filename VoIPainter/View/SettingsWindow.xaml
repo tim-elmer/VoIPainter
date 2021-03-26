@@ -6,26 +6,35 @@
         mc:Ignorable="d"
         Title="Settings" 
         SizeToContent="WidthAndHeight"
-        ResizeMode="NoResize" 
         WindowStyle="ToolWindow"
-        xml:lang="en-US">
+        xml:lang="en-US" Height="177">
     <Grid Margin="5">
-        <Label Content="Resize Mode" 
-               HorizontalAlignment="Left" 
-               VerticalAlignment="Top"/>
-        <ComboBox HorizontalAlignment="Left" 
-                  Margin="85,3,0,0" 
-                  VerticalAlignment="Top" 
-                  Width="211"
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Resize Mode"
+               Grid.Row="0"
+               Grid.Column="0"/>
+        <ComboBox MinWidth="200"
                   ItemsSource="{Binding Path=ImageResizeModeNames}"
                   DisplayMemberPath="Value"
                   SelectedValuePath="Key"
-                  SelectedValue="{Binding Path=ResizeMode, Mode=TwoWay}"/>
-        <Label Content="Target Contrast" HorizontalAlignment="Left" Margin="0,30,0,0" VerticalAlignment="Top"/>
-        <Slider HorizontalAlignment="Left" 
-                Margin="96,32,0,0" 
-                VerticalAlignment="Top" 
-                Width="200" 
+                  SelectedValue="{Binding Path=ResizeMode, Mode=TwoWay}"
+                  Grid.Row="0"
+                  Grid.Column="1"/>
+        <Label Content="Target Contrast"
+               Grid.Row="1"
+               Grid.Column="0"/>
+        <Slider MinWidth="200" 
                 Minimum="0" 
                 Maximum="1" 
                 SmallChange="0.01" 
@@ -34,25 +43,36 @@
                 TickPlacement="BottomRight" 
                 Value="{Binding Path=TargetContrast, Mode=TwoWay, Delay=100}" 
                 AutoToolTipPlacement="TopLeft"
-                AutoToolTipPrecision="2" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"/>
-        <Label Content="Automatically Duck Contrast" 
-               HorizontalAlignment="Left" 
-               Margin="0,61,0,0" 
-               VerticalAlignment="Top"/>
-        <CheckBox HorizontalAlignment="Left" 
-                  Margin="165,66,0,0" 
-                  VerticalAlignment="Top"
-                  IsChecked="{Binding Path=AutoDuckContrast, Mode=TwoWay}"/>
-        <Label Content="Ringtone Fade Out (sec.)" 
-               HorizontalAlignment="Left" 
-               Margin="2,92,0,0" 
-               VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" 
-                 Margin="147,96,0,0"
-                 Text="{Binding Path=FadeOutTime, Mode=TwoWay, Delay=100, ValidatesOnExceptions=True}"
-                 VerticalAlignment="Top"
-                 Width="149"
-                 Style="{StaticResource textBoxInvalidated}"/>
-
+                AutoToolTipPrecision="2" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
+                Grid.Row="1"
+                Grid.Column="1"/>
+        <TextBlock Text="{Binding Path=TargetContrast, Mode=OneWay, FallbackValue=0.50, StringFormat={}{0:N2}}"
+                   Foreground="Gray"
+                   VerticalAlignment="Center"
+                   Grid.Row="1"
+                   Grid.Column="2"/>
+        <Label Content="Automatically Duck Contrast"
+               Grid.Row="2"
+               Grid.Column="0"/>
+        <CheckBox IsChecked="{Binding Path=AutoDuckContrast, Mode=TwoWay}" 
+                  VerticalAlignment="Center"
+                  Grid.Row="2"
+                  Grid.Column="1"/>
+        <Label Content="Use Contrast Box"
+               Grid.Row="3"
+               Grid.Column="0"/>
+        <CheckBox IsChecked="{Binding Path=UseContrastBox, Mode=TwoWay}"
+                  VerticalAlignment="Center"
+                  Grid.Row="3"
+                  Grid.Column="1"/>
+        <Label Content="Ringtone Fade Out (sec.)"
+               Grid.Row="4"
+               Grid.Column="0"/>
+        <TextBox Text="{Binding Path=FadeOutTime, Mode=TwoWay, Delay=100, ValidatesOnExceptions=True}"
+                 VerticalAlignment="Center"
+                 MinWidth="149"
+                 Style="{StaticResource textBoxInvalidated}"
+                 Grid.Row="4"
+                 Grid.Column="1"/>
     </Grid>
 </Window>
