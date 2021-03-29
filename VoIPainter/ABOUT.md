@@ -14,7 +14,7 @@ VoIPainter uses code based on the work of Gareth Palmer; [how to request CGI exe
 
 VoIPainter uses the [ImageSharp](https://github.com/SixLabors/ImageSharp) library for image manipulation. ImageSharp licensed under the [Apache License 2.0](https://github.com/SixLabors/ImageSharp/blob/master/LICENSE).
 
-VoIPainter uses the [NAudio](https://github.com/naudio/NAudio) library for audio manipulation. NAudio is licensed under the [MS-PL](https://github.com/naudio/NAudio/blob/master/license.txt).
+VoIPainter uses the [NAudio](https://github.com/naudio/NAudio) library for audio manipulation. NAudio is licensed under the [MIT license](https://github.com/naudio/NAudio/blob/master/license.txt).
 
 VoIPainter uses the [Markdig](https://github.com/lunet-io/markdig) and [Neo.Markdig.Xaml](https://github.com/neolithos/NeoMarkdigXaml) libraries for Markdown rendering. These libraries are licensed under the [BSD 2-Clause](https://github.com/lunet-io/markdig/blob/master/license.txt) and [Apache-2.0](https://github.com/neolithos/NeoMarkdigXaml/blob/master/LICENSE.md) respectively.
 

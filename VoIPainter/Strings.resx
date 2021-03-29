@@ -123,6 +123,9 @@
   <data name="AutoDuckedContrast" xml:space="preserve">
     <value>Image contrast automatically lowered</value>
   </data>
+  <data name="ContrastBox" xml:space="preserve">
+    <value>Contrast box applied.</value>
+  </data>
   <data name="ErrorNoFile" xml:space="preserve">
     <value>File not found</value>
   </data>

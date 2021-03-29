@@ -79,6 +79,15 @@ namespace VoIPainter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contrast box applied..
+        /// </summary>
+        internal static string ContrastBox {
+            get {
+                return ResourceManager.GetString("ContrastBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File not found.
         /// </summary>
         internal static string ErrorNoFile {

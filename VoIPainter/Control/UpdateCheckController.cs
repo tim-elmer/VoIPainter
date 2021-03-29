@@ -16,7 +16,6 @@ namespace VoIPainter.Control
 
         public UpdateCheckController(LogController logController) => _logController = logController ?? throw new ArgumentNullException(nameof(logController));
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Exceptions caught generally to display to user.")]
         public async Task<Model.UpdateResponse> GetUpdateAvailable()
         {
             _logController.Log(new Model.Logging.Entry(Model.Logging.LogSeverity.Info, Strings.StatusUpdateCheck));
