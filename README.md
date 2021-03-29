@@ -37,5 +37,6 @@ VoIPainter is a simple Windows utility designed to change the background on a us
 | ---: | --- |
 | Resize Mode | How under/oversized images will be treated: Stretch: The image will be stretched to fit the screen; **Crop (recommended)**: The largest dimension will be cropped on the center of the image to fit the screen; Center: The image will be scaled to fit, and centered on the screen.|
 | Target Contrast | The maximum contrast that images should have. **The default value of `0.6` is recommended.** |
-| Automatically Duck Contrast | If images with excessive contrast should have their contrast lowered.
+| Automatically Duck Contrast | If images with excessive contrast should have their contrast lowered. |
+| Use Contrast Box | Rather than lowering the contrast of the whole image, only lower a box behind the lines. |
 | Ringtone Fade Out | How long the ringtone will fade out at the end. To not fade out, set to `0`. Must be between `0` and `20` seconds. |
