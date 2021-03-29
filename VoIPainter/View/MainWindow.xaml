@@ -50,8 +50,7 @@
             <MenuItem Header="Browse Image..." 
                       Click="BrowseImageButton_Click"/>
             <MenuItem Header="Browse Ringtone..." 
-                      Click="BrowseToneButton_Click"
-                      IsEnabled="{Binding Path=SoxPath, Mode=OneWay, Converter={StaticResource IsStringNotNullOrWhitespaceConverter}}"/>
+                      Click="BrowseToneButton_Click"/>
             <MenuItem Header="Settings"
                       Click="SettingsMenuItem_Click"/>
             <MenuItem Header="Help">
