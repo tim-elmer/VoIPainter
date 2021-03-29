@@ -7,15 +7,15 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Version>1.3.0</Version>
     <AssemblyVersion>1.3.0.1</AssemblyVersion>
-    <FileVersion>1.2.0.1</FileVersion>
+    <FileVersion>1.3.0.1</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Copyright>Timothy Elmer 2020</Copyright>
+    <Copyright>Timothy Elmer 2021</Copyright>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Authors>Timothy Elmer</Authors>
     <Description>VoIPainter is a simple utility designed to change the background on a user's Cisco VoIP phone, without requiring access to the CUCM backend.</Description>
     <PackageReleaseNotes>- Added contrast box option
-- Updated dependancies</PackageReleaseNotes>
+- Updated dependencies</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

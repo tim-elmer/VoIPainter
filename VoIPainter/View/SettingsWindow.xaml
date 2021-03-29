@@ -7,19 +7,20 @@
         Title="Settings" 
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
-        xml:lang="en-US" Height="177">
+        xml:lang="en-US" 
+        ResizeMode="NoResize">
     <Grid Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Label Content="Resize Mode"
                Grid.Row="0"
