@@ -1,4 +1,7 @@
 # VoIPainter
+
+> This project is currently on hold, as I no longer have access to a CUCM system. It should, however, be functionally complete, and bug reports will be addressed if possible.
+
 ## Description
 VoIPainter is a simple Windows utility designed to change the background on a user's Cisco VoIP phone, without requiring access to the CUCM administrative backend.
 
